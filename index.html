@@ -9,7 +9,8 @@
     <img id="f" src="3.1.png" alt="" srcset="">
     <img id="s" src="pic.png" alt="" srcset="">
     <input type="file" name="" id="file">
-    <div><button>Open</button></div>
+    <div><button id="open">Open</button></div>
+    <div><button id="download">download</button></div>
     <canvas height="400" width="400" id="result"></canvas>
 </body>
 </html>
@@ -37,9 +38,10 @@
     var file  = document.getElementById('file');
 
 
-    document.querySelector("button").onclick=()=>{
+    document.querySelector("#open").onclick=()=>{
         file.click()        
     }
+    
 
     file.onchange=(e)=>{
         img.src=URL.createObjectURL(e.target.files[0]);
@@ -55,6 +57,17 @@
     // create a counter to make sure all images are loaded before drawing
     var loaded = 0;
 
+
+
+    document.querySelector("#download").onclick=()=>{
+        let image = result.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream");
+        var link = document.createElement('a');
+        link.download = "my-image.png";
+        link.href = image;
+        link.click();
+    }
+
+
     // something to execute when loading of images has completed
     function combine(pic){
     // The order of drawing will be the order of layers
@@ -68,6 +81,7 @@
     img.onload=()=>{
         alert("Set")
         combine(img);
+        
     }
     
         // Add event listeners to the images
