@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img id="f" src="3.1.png" alt="" srcset="">
+    <img id="s" src="pic.png" alt="" srcset="">
+    <input type="file" name="" id="file">
+    <div><button>Open</button></div>
+    <canvas height="400" width="400" id="result"></canvas>
+</body>
+</html>
+<style>
+    button{
+        background: blueviolet;
+        border: none;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 5px;
+    }
+    button:hover{
+        background: rgb(171, 114, 224);
+
+    }
+    input{
+        display: none;
+    }
+</style>
+<script>
+
+    var img = new Image;
+    
+
+    var file  = document.getElementById('file');
+
+
+    document.querySelector("button").onclick=()=>{
+        file.click()        
+    }
+
+    file.onchange=(e)=>{
+        img.src=URL.createObjectURL(e.target.files[0]);
+    }
+
+    var first  = document.getElementById('f');
+    var second = document.getElementById('s');
+
+    // get canvas and context
+    var result = document.getElementById('result');
+    var context = result.getContext('2d');
+
+    // create a counter to make sure all images are loaded before drawing
+    var loaded = 0;
+
+    // something to execute when loading of images has completed
+    function combine(pic){
+    // The order of drawing will be the order of layers
+    // The final two arguments define the size of what you want to draw
+        let second=pic
+        let WidthSet=second.width/400
+        //console.log(WidthSet,second.width);
+        context.drawImage(second, 0, 0, second.width, second.height,0,0,400,second.height/WidthSet);
+        context.drawImage(first, 0, 0, 400, 400);
+    }
+    img.onload=()=>{
+        alert("Set")
+        combine(img);
+    }
+    
+        // Add event listeners to the images
+    first.addEventListener('load', function(){ 
+    // increase the loaded number
+        loaded++; 
+        // hide the image
+        first.style.display = 'none'; 
+        // if loaded hits the total number of images, use the completion function
+        if(loaded === 2) combine(second); 
+    }, false);
+
+    // (wrince, repeat for image 2)
+    second.addEventListener('load', function(){
+    loaded++; 
+    second.style.display = 'none'; 
+    if(loaded === 2) combine(second); 
+    }, false);
+</script>
